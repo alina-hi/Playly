@@ -24,10 +24,15 @@ public class User {
         this.isActive = true;
     }
 
-    // Геттеры и сеттеры (можно сгенерировать в IDE)
+    // Геттеры и сеттеры
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
+    // В класс User добавьте этот метод (после метода addToReputation):
 
+    // Метод для получения статуса в виде строки
+    public String getStatusString() {
+        return isVerified ? "Верифицированный родитель" : "Непроверенный родитель";
+    }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
