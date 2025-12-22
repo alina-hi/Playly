@@ -45,4 +45,5 @@ public class DatabaseConnection {
             System.out.println("❌ Database connection test FAILED: " + e.getMessage());
         }
     }
+
 }
