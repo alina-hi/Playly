@@ -8,7 +8,7 @@
     <!-- ВСЕ запросы обрабатывает один сервлет -->
     <servlet>
         <servlet-name>ApiServlet</servlet-name>
-        <servlet-class>com.playly.ApiServlet</servlet-class>
+        <servlet-class>com.playly.servlets.ApiServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

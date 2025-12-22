@@ -1,4 +1,7 @@
-package com.playly;
+package com.playly.dao;
+
+import com.playly.DatabaseConnection;
+import com.playly.models.Playground;
 
 import java.sql.*;
 import java.util.*;

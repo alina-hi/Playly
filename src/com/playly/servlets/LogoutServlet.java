@@ -1,4 +1,4 @@
-package com.playly;
+package com.playly.servlets;
 
 import com.google.gson.Gson;
 
