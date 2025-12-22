@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Playly - Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        button { margin: 5px; padding: 10px; }
+        pre { background: #f5f5f5; padding: 10px; }
+    </style>
+</head>
+<body>
+<h1>Playly API Test</h1>
+
+<h2>Test API Endpoints:</h2>
+<button onclick="testApi('api/playgrounds')">Get All Playgrounds</button>
+<button onclick="testApi('api/amenities')">Get All Amenities</button>
+<button onclick="testApi('api/1')">Get Playground #1</button>
+
+<h2>Raw API Links:</h2>
+<ul>
+    <li><a href="api/playgrounds" target="_blank">/api/playgrounds</a></li>
+    <li><a href="api/amenities" target="_blank">/api/amenities</a></li>
+    <li><a href="api/1" target="_blank">/api/1</a></li>
+</ul>
+
+<h2>Result:</h2>
+<pre id="result">Click a button...</pre>
+
+<script>
+    async function testApi(endpoint) {
+        const result = document.getElementById('result');
+        result.textContent = 'Loading...';
+
+        try {
+            const response = await fetch(endpoint);
+            const data = await response.json();
+            result.textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+            result.textContent = 'Error: ' + error.message;
+        }
+    }
+
+    // Auto-test on load
+    window.onload = () => testApi('api/playgrounds');
+</script>
+</body>
+</html>
