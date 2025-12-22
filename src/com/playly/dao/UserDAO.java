@@ -267,4 +267,30 @@ public class UserDAO {
     public String hashPasswordForTest(String password) {
         return hashPassword(password);
     }
+    // В класс UserDAO добавим:
+
+    // Метод для обновления профиля
+    public boolean updateProfile(User user) {
+        String sql = "UPDATE users SET display_name = ?, about = ?, child_age_range = ?, " +
+                "interests = ?, location = ?, avatar_url = ? WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, user.getDisplayName());
+            stmt.setString(2, user.getAbout());
+            stmt.setString(3, user.getChildAgeRange());
+            stmt.setString(4, user.getInterests());
+            stmt.setString(5, user.getLocation());
+            stmt.setString(6, user.getAvatarUrl());
+            stmt.setInt(7, user.getId());
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error updating profile: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

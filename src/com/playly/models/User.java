@@ -12,7 +12,15 @@ public class User {
     private LocalDateTime createdAt;
     private boolean isActive;
 
-    // Конструкторы и геттеры/сеттеры
+    // НОВЫЕ ПОЛЯ ДЛЯ ПРОФИЛЯ:
+    private String displayName;      // Отображаемое имя
+    private String about;           // О себе
+    private String childAgeRange;   // Возраст детей: "3-5", "6-10", etc.
+    private String interests;       // Интересы (JSON или текст)
+    private String location;        // Район/город
+    private String avatarUrl;       // Ссылка на аватар
+
+    // Конструкторы
     public User() {}
 
     public User(String email, String username, String passwordHash) {
@@ -22,17 +30,13 @@ public class User {
         this.isVerified = false;
         this.reputation = 0.0;
         this.isActive = true;
+        this.displayName = username; // По умолчанию как username
     }
 
-    // Геттеры и сеттеры
+    // Геттеры и сеттеры (старые + новые)
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
-    // В класс User добавьте этот метод (после метода addToReputation):
 
-    // Метод для получения статуса в виде строки
-    public String getStatusString() {
-        return isVerified ? "Верифицированный родитель" : "Непроверенный родитель";
-    }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
@@ -58,9 +62,56 @@ public class User {
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
 
+    // Новые геттеры/сеттеры
+    public String getDisplayName() { return displayName; }
+    public void setDisplayName(String displayName) { this.displayName = displayName; }
+
+    public String getAbout() { return about; }
+    public void setAbout(String about) { this.about = about; }
+
+    public String getChildAgeRange() { return childAgeRange; }
+    public void setChildAgeRange(String childAgeRange) { this.childAgeRange = childAgeRange; }
+
+    public String getInterests() { return interests; }
+    public void setInterests(String interests) { this.interests = interests; }
+
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
+
+    public String getAvatarUrl() { return avatarUrl; }
+    public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
+
+    // Метод для получения статуса в виде строки (УБЕДИТЕСЬ ЧТО ОН ТОЛЬКО ОДИН!)
+    public String getStatusString() {
+        return isVerified ? "Верифицированный родитель" : "Непроверенный родитель";
+    }
+
+    // Метод для увеличения/уменьшения репутации
+    public void addToReputation(double value) {
+        setReputation(this.reputation + value);
+    }
+
+    // Метод для получения информации о детях (обобщенной)
+    public String getChildInfo() {
+        if (childAgeRange == null || childAgeRange.isEmpty()) {
+            return "Не указано";
+        }
+        return "Дети: " + childAgeRange + " лет";
+    }
+
+    // Метод для получения интересов как списка
+    public String[] getInterestsList() {
+        if (interests == null || interests.isEmpty()) {
+            return new String[0];
+        }
+        return interests.split(",");
+    }
+
     @Override
     public String toString() {
-        return String.format("User{id=%d, username='%s', email='%s', verified=%s, reputation=%.2f}",
-                id, username, email, isVerified ? "✓" : "✗", reputation);
+        return String.format(
+                "User{id=%d, username='%s', displayName='%s', verified=%s, reputation=%.2f, location='%s'}",
+                id, username, displayName, isVerified ? "✓" : "✗", reputation, location
+        );
     }
 }

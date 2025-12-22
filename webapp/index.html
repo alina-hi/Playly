@@ -241,12 +241,9 @@
             <a href="index.html">Главная</a>
             <a href="register.html">Регистрация</a>
             <a href="login.html">Вход</a>
-            <a href="#" id="profileLink" style="display:none;">Профиль</a>
-            <a href="#" id="logoutLink" style="display:none;">Выйти</a>
         </div>
     </div>
 </nav>
-
 <!-- Главный баннер -->
 <section class="hero">
     <div class="hero-content">
@@ -258,12 +255,6 @@
 
 <!-- Основной контент -->
 <div class="container">
-    <!-- Статус авторизации -->
-    <div class="auth-status">
-        <h3>Статус авторизации</h3>
-        <p id="authStatus">Проверка...</p>
-    </div>
-
     <!-- Возможности -->
     <section class="features">
         <div class="feature-card">
@@ -281,7 +272,7 @@
     </section>
 
     <!-- Тест API (для разработки) -->
-    <section class="api-test">
+    <!--<section class="api-test">
         <h2>Тестирование API</h2>
         <div class="test-buttons">
             <button class="test-button" onclick="testGetPlaygrounds()">Получить площадки</button>
@@ -290,11 +281,11 @@
         </div>
         <div id="apiResult"></div>
     </section>
-</div>
+</div>-->
 
 <!-- Футер -->
 <footer class="footer">
-    <p>© 2024 Playly - Платформа для родителей</p>
+    <p>© 2025 Playly - Платформа для родителей</p>
     <p>Учебный проект</p>
 </footer>
 
@@ -306,42 +297,67 @@
 
     // Функция проверки авторизации
     async function checkAuthStatus() {
-        try {
-            const response = await fetch('/playly/api/login', {
-                method: 'GET'
-            });
+    try {
+        const response = await fetch('/playly/api/login', {
+            method: 'GET'
+        });
 
-            const result = await response.json();
-            const authStatus = document.getElementById('authStatus');
-            const profileLink = document.getElementById('profileLink');
-            const logoutLink = document.getElementById('logoutLink');
+        const result = await response.json();
+        const authStatus = document.getElementById('authStatus');
+        const profileLink = document.getElementById('profileLink');
+        const logoutLink = document.getElementById('logoutLink');
+        const mapLink = document.getElementById('mapLink'); // ← ДОБАВЬТЕ ЭТО
+        const registerLink = document.getElementById('registerLink'); // ← И ЭТО
+        const loginLink = document.getElementById('loginLink'); // ← И ЭТО
+        const mapLink = document.getElementById('mapLink');        // ← ДОБАВЬТЕ
+        const registerLink = document.getElementById('registerLink'); // ← ДОБАВЬТЕ
+        const loginLink = document.getElementById('loginLink');
+        if (result.success && result.authenticated) {
+            authStatus.innerHTML = `✅ Вы авторизованы как <strong>${result.user.username}</strong>`;
 
-            if (result.success && result.authenticated) {
-                authStatus.innerHTML = `✅ Вы авторизованы как <strong>${result.user.username}</strong>`;
-                profileLink.style.display = 'inline';
-                logoutLink.style.display = 'inline';
+            // ПОКАЗЫВАЕМ для авторизованных
+            profileLink.style.display = 'inline';
+            logoutLink.style.display = 'inline';
+            mapLink.style.display = 'inline'; // ← КАРТУ
 
-                // Настройка обработчиков для ссылок
-                profileLink.onclick = function() {
-                    alert('Страница профиля в разработке');
-                    return false;
-                };
+            // СКРЫВАЕМ для авторизованных
+            registerLink.style.display = 'none';
+            loginLink.style.display = 'none';
 
-                logoutLink.onclick = async function(e) {
-                    e.preventDefault();
-                    await logout();
-                    return false;
-                };
-            } else {
-                authStatus.innerHTML = '❌ Вы не авторизованы';
-                profileLink.style.display = 'none';
-                logoutLink.style.display = 'none';
-            }
-        } catch (error) {
-            console.error('Auth check error:', error);
-            document.getElementById('authStatus').innerHTML = '⚠️ Ошибка проверки авторизации';
+            // Настройка обработчиков
+            profileLink.onclick = function() {
+                window.location.href = 'profile';
+                return false;
+            };
+
+            mapLink.onclick = function() {
+                window.location.href = 'map';
+                return false;
+            };
+
+            logoutLink.onclick = async function(e) {
+                e.preventDefault();
+                await logout();
+                return false;
+            };
+
+        } else {
+            authStatus.innerHTML = '❌ Вы не авторизованы';
+
+            // СКРЫВАЕМ для неавторизованных
+            profileLink.style.display = 'none';
+            logoutLink.style.display = 'none';
+            mapLink.style.display = 'none';
+
+            // ПОКАЗЫВАЕМ для неавторизованных
+            registerLink.style.display = 'inline';
+            loginLink.style.display = 'inline';
         }
+    } catch (error) {
+        console.error('Auth check error:', error);
+        document.getElementById('authStatus').innerHTML = '⚠️ Ошибка проверки авторизации';
     }
+}
 
     // Функция выхода
     async function logout() {
