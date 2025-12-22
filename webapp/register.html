@@ -5,104 +5,437 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация - Playly</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            max-width: 400px;
+            max-width: 450px; /* Увеличил максимальную ширину */
             margin: 50px auto;
             padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 35px 30px; /* Увеличил внутренние отступы */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Усилил тень */
+            width: 100%;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 25px; /* Увеличил отступы между группами */
         }
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+            font-size: 15px;
         }
         input {
             width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
+            padding: 14px 15px; /* Увеличил padding */
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: #fafafa;
+        }
+        input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        input.error-border {
+            border-color: #e74c3c;
+        }
+        input.success-border {
+            border-color: #27ae60;
         }
         button {
+            width: 100%;
+            padding: 16px;
             background-color: #4CAF50;
             color: white;
-            padding: 10px 15px;
             border: none;
+            border-radius: 6px;
+            font-size: 17px;
+            font-weight: bold;
             cursor: pointer;
-            width: 100%;
-        }
-        .error {
-            color: red;
+            transition: all 0.3s;
             margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .message {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 15px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .success {
-            color: green;
-            margin-top: 10px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        .links {
+            margin-top: 25px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .links a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin: 0 12px;
+            font-size: 15px;
+            transition: color 0.3s;
+        }
+        .links a:hover {
+            text-decoration: underline;
+            color: #3d8b40;
+        }
+        .hint {
+            font-size: 13px;
+            color: #666;
+            margin-top: 6px;
+            display: block;
+            line-height: 1.4;
+        }
+        .required-marker {
+            color: #e74c3c;
+            margin-left: 3px;
+        }
+        .password-strength {
+            font-size: 13px;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+        .weak { color: #e74c3c; }
+        .medium { color: #f39c12; }
+        .strong { color: #27ae60; }
+
+        /* Индикаторы для полей */
+        .field-status {
+            display: flex;
+            align-items: center;
+            margin-top: 4px;
+            font-size: 13px;
+        }
+        .field-status.valid {
+            color: #27ae60;
+        }
+        .field-status.invalid {
+            color: #e74c3c;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+                margin: 20px auto;
+            }
+            .container {
+                padding: 25px 20px;
+            }
+            h2 {
+                font-size: 24px;
+                margin-bottom: 25px;
+            }
+        }
+
+        /* Стиль для маленького текста подсказок */
+        .form-group small {
+            display: block;
+            margin-top: 4px;
+            color: #888;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-<h2>Регистрация в Playly</h2>
-<form id="registrationForm">
-    <div class="form-group">
-        <label for="email">Email *</label>
-        <input type="email" id="email" name="email" required>
+<div class="container">
+    <h2>Регистрация в Playly</h2>
+
+    <form id="registrationForm">
+        <div class="form-group">
+            <label for="email">Email <span class="required-marker">*</span></label>
+            <input type="email" id="email" name="email" required
+                   placeholder="ваш@email.com">
+            <small>Будет использоваться для входа в систему</small>
+        </div>
+
+        <div class="form-group">
+            <label for="username">Имя пользователя <span class="required-marker">*</span></label>
+            <input type="text" id="username" name="username" required
+                   placeholder="ivanov" minlength="3" maxlength="30">
+            <small>Только буквы (a-z), цифры (0-9) и подчеркивание (_)</small>
+            <div id="usernameStatus" class="field-status"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Пароль <span class="required-marker">*</span></label>
+            <input type="password" id="password" name="password" required
+                   placeholder="Не менее 6 символов" minlength="6">
+            <div id="passwordStrength" class="password-strength"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="confirmPassword">Подтверждение пароля <span class="required-marker">*</span></label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required
+                   placeholder="Повторите пароль">
+            <div id="passwordMatch" class="field-status"></div>
+        </div>
+
+        <button type="submit" id="submitBtn">Зарегистрироваться</button>
+
+        <div id="message" class="message"></div>
+    </form>
+
+    <div class="links">
+        <a href="login.html">Уже есть аккаунт? Войти</a> |
+        <a href="index.html">На главную</a>
     </div>
-    <div class="form-group">
-        <label for="username">Имя пользователя *</label>
-        <input type="text" id="username" name="username" required minlength="3">
-        <small>Только буквы, цифры и подчеркивание</small>
-    </div>
-    <div class="form-group">
-        <label for="password">Пароль *</label>
-        <input type="password" id="password" name="password" required minlength="6">
-    </div>
-    <div class="form-group">
-        <label for="confirmPassword">Подтвердите пароль *</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" required>
-    </div>
-    <button type="submit">Зарегистрироваться</button>
-</form>
-<div id="message"></div>
+</div>
 
 <script>
-    document.getElementById('registrationForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('registrationForm');
+        const messageDiv = document.getElementById('message');
+        const submitBtn = document.getElementById('submitBtn');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const passwordStrengthDiv = document.getElementById('passwordStrength');
+        const passwordMatchDiv = document.getElementById('passwordMatch');
+        const usernameInput = document.getElementById('username');
+        const usernameStatusDiv = document.getElementById('usernameStatus');
+        const emailInput = document.getElementById('email');
 
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
+        // Проверка сложности пароля
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 'weak';
+            let strengthText = 'Слабый';
 
-        if (password !== confirmPassword) {
-            document.getElementById('message').innerHTML =
-                '<p class="error">Пароли не совпадают</p>';
-            return;
-        }
+            if (password.length >= 10 && /[A-Z]/.test(password) && /[0-9]/.test(password) && /[!@#$%^&*]/.test(password)) {
+                strength = 'strong';
+                strengthText = 'Сильный';
+            } else if (password.length >= 8) {
+                strength = 'medium';
+                strengthText = 'Средний';
+            } else if (password.length >= 6) {
+                strength = 'weak';
+                strengthText = 'Слабый';
+            }
 
-        const formData = {
-            email: document.getElementById('email').value,
-            username: document.getElementById('username').value,
-            password: password
-        };
+            if (password.length === 0) {
+                passwordStrengthDiv.textContent = '';
+            } else {
+                passwordStrengthDiv.textContent = `Надёжность пароля: ${strengthText}`;
+                passwordStrengthDiv.className = `password-strength ${strength}`;
+            }
 
-        const response = await fetch('/playly/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)
+            // Цвет рамки
+            if (password.length >= 6) {
+                this.classList.remove('error-border');
+                this.classList.add('success-border');
+            } else if (password.length > 0) {
+                this.classList.add('error-border');
+                this.classList.remove('success-border');
+            } else {
+                this.classList.remove('error-border', 'success-border');
+            }
         });
 
-        const result = await response.json();
-        const messageDiv = document.getElementById('message');
+        // Проверка совпадения паролей в реальном времени
+        confirmPasswordInput.addEventListener('input', validatePasswords);
+        passwordInput.addEventListener('input', validatePasswords);
 
-        if (result.success) {
-            messageDiv.innerHTML = '<p class="success">' + result.message + '</p>';
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 2000);
-        } else {
-            messageDiv.innerHTML = '<p class="error">' + result.message + '</p>';
+        function validatePasswords() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            if (confirmPassword.length === 0) {
+                passwordMatchDiv.textContent = '';
+                passwordMatchDiv.className = 'field-status';
+                confirmPasswordInput.classList.remove('error-border', 'success-border');
+                return true;
+            }
+
+            if (password === confirmPassword) {
+                passwordMatchDiv.textContent = '✓ Пароли совпадают';
+                passwordMatchDiv.className = 'field-status valid';
+                confirmPasswordInput.classList.remove('error-border');
+                confirmPasswordInput.classList.add('success-border');
+                return true;
+            } else {
+                passwordMatchDiv.textContent = '✗ Пароли не совпадают';
+                passwordMatchDiv.className = 'field-status invalid';
+                confirmPasswordInput.classList.add('error-border');
+                confirmPasswordInput.classList.remove('success-border');
+                return false;
+            }
         }
+
+        // Валидация username
+        usernameInput.addEventListener('input', function() {
+            const username = this.value;
+
+            if (username.length === 0) {
+                usernameStatusDiv.textContent = '';
+                usernameStatusDiv.className = 'field-status';
+                this.classList.remove('error-border', 'success-border');
+                return;
+            }
+
+            // Проверка формата
+            const isValidFormat = /^[a-zA-Z0-9_]+$/.test(username);
+            const isValidLength = username.length >= 3;
+
+            if (isValidFormat && isValidLength) {
+                usernameStatusDiv.textContent = '✓ Допустимое имя';
+                usernameStatusDiv.className = 'field-status valid';
+                this.classList.remove('error-border');
+                this.classList.add('success-border');
+            } else if (!isValidFormat) {
+                usernameStatusDiv.textContent = '✗ Только буквы, цифры и _';
+                usernameStatusDiv.className = 'field-status invalid';
+                this.classList.add('error-border');
+                this.classList.remove('success-border');
+            } else {
+                usernameStatusDiv.textContent = '✗ Минимум 3 символа';
+                usernameStatusDiv.className = 'field-status invalid';
+                this.classList.add('error-border');
+                this.classList.remove('success-border');
+            }
+        });
+
+        // Валидация email
+        emailInput.addEventListener('blur', function() {
+            const email = this.value;
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (email.length > 0 && !emailPattern.test(email)) {
+                this.classList.add('error-border');
+            } else if (email.length > 0) {
+                this.classList.remove('error-border');
+                this.classList.add('success-border');
+            }
+        });
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Сброс сообщений
+            messageDiv.className = 'message';
+            messageDiv.textContent = '';
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Регистрация...';
+
+            // Проверка совпадения паролей
+            if (!validatePasswords()) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Пароли не совпадают';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Зарегистрироваться';
+                return;
+            }
+
+            // Валидация username
+            const username = document.getElementById('username').value;
+            if (!/^[a-zA-Z0-9_]+$/.test(username) || username.length < 3) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Имя пользователя должно содержать минимум 3 символа (буквы, цифры или _)';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Зарегистрироваться';
+                return;
+            }
+
+            // Валидация email
+            const email = document.getElementById('email').value.trim();
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Введите корректный email адрес';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Зарегистрироваться';
+                return;
+            }
+
+            const formData = {
+                email: email,
+                username: username,
+                password: document.getElementById('password').value
+            };
+
+            try {
+                const response = await fetch('/playly/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    messageDiv.className = 'message success';
+                    messageDiv.textContent = result.message;
+
+                    // Перенаправление на страницу входа через 2 секунды
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    messageDiv.className = 'message error';
+                    messageDiv.textContent = result.message;
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Зарегистрироваться';
+                }
+
+            } catch (error) {
+                console.error('Registration error:', error);
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Ошибка соединения с сервером. Попробуйте позже.';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Зарегистрироваться';
+            }
+        });
     });
 </script>
 </body>
