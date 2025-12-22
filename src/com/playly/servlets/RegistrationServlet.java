@@ -1,4 +1,4 @@
-package com.playly;
+package com.playly.servlets;
 
 import com.playly.dao.UserDAO;
 import com.playly.models.User;

@@ -1,4 +1,4 @@
-package com.playly;
+package com.playly.models;
 
 import java.util.Date;
 import java.util.List;

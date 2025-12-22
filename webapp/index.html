@@ -1,47 +1,417 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Playly - Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playly - Детские площадки</title>
     <style>
-        body { font-family: Arial; padding: 20px; }
-        button { margin: 5px; padding: 10px; }
-        pre { background: #f5f5f5; padding: 10px; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            background-color: #4CAF50;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: white;
+            color: #4CAF50;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            color: #4CAF50;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .api-test {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 3rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .api-test h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 0.5rem;
+        }
+
+        .test-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .test-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .test-button:hover {
+            background-color: #45a049;
+        }
+
+        .test-button.secondary {
+            background-color: #6c757d;
+        }
+
+        .test-button.secondary:hover {
+            background-color: #5a6268;
+        }
+
+        #apiResult {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+            display: none;
+        }
+
+        .result-success {
+            border-left-color: #28a745 !important;
+        }
+
+        .result-error {
+            border-left-color: #dc3545 !important;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .auth-status {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .auth-status h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+        }
     </style>
 </head>
 <body>
-<h1>Playly API Test</h1>
+<!-- Навигация -->
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="index.html" class="logo">Playly</a>
+        <div class="nav-links">
+            <a href="index.html">Главная</a>
+            <a href="register.html">Регистрация</a>
+            <a href="login.html">Вход</a>
+            <a href="#" id="profileLink" style="display:none;">Профиль</a>
+            <a href="#" id="logoutLink" style="display:none;">Выйти</a>
+        </div>
+    </div>
+</nav>
 
-<h2>Test API Endpoints:</h2>
-<button onclick="testApi('api/playgrounds')">Get All Playgrounds</button>
-<button onclick="testApi('api/amenities')">Get All Amenities</button>
-<button onclick="testApi('api/1')">Get Playground #1</button>
+<!-- Главный баннер -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Найдите лучшие детские площадки</h1>
+        <p>Открывайте, оценивайте и делитесь информацией о детских площадках в вашем городе</p>
+        <a href="register.html" class="cta-button">Присоединиться к сообществу</a>
+    </div>
+</section>
 
-<h2>Raw API Links:</h2>
-<ul>
-    <li><a href="api/playgrounds" target="_blank">/api/playgrounds</a></li>
-    <li><a href="api/amenities" target="_blank">/api/amenities</a></li>
-    <li><a href="api/1" target="_blank">/api/1</a></li>
-</ul>
+<!-- Основной контент -->
+<div class="container">
+    <!-- Статус авторизации -->
+    <div class="auth-status">
+        <h3>Статус авторизации</h3>
+        <p id="authStatus">Проверка...</p>
+    </div>
 
-<h2>Result:</h2>
-<pre id="result">Click a button...</pre>
+    <!-- Возможности -->
+    <section class="features">
+        <div class="feature-card">
+            <h3>📝 Регистрация родителей</h3>
+            <p>Создайте аккаунт, чтобы получить доступ ко всем функциям приложения</p>
+        </div>
+        <div class="feature-card">
+            <h3>⭐ Оценка площадок</h3>
+            <p>Оставляйте отзывы и оценки детским площадкам</p>
+        </div>
+        <div class="feature-card">
+            <h3>👥 Сообщество</h3>
+            <p>Общайтесь с другими родителями, делитесь рекомендациями</p>
+        </div>
+    </section>
+
+    <!-- Тест API (для разработки) -->
+    <section class="api-test">
+        <h2>Тестирование API</h2>
+        <div class="test-buttons">
+            <button class="test-button" onclick="testGetPlaygrounds()">Получить площадки</button>
+            <button class="test-button" onclick="testUserAPI()">Тест пользователей</button>
+            <button class="test-button secondary" onclick="clearResult()">Очистить</button>
+        </div>
+        <div id="apiResult"></div>
+    </section>
+</div>
+
+<!-- Футер -->
+<footer class="footer">
+    <p>© 2024 Playly - Платформа для родителей</p>
+    <p>Учебный проект</p>
+</footer>
 
 <script>
-    async function testApi(endpoint) {
-        const result = document.getElementById('result');
-        result.textContent = 'Loading...';
+    // Проверка статуса авторизации при загрузке
+    document.addEventListener('DOMContentLoaded', function() {
+        checkAuthStatus();
+    });
 
+    // Функция проверки авторизации
+    async function checkAuthStatus() {
         try {
-            const response = await fetch(endpoint);
-            const data = await response.json();
-            result.textContent = JSON.stringify(data, null, 2);
+            const response = await fetch('/playly/api/login', {
+                method: 'GET'
+            });
+
+            const result = await response.json();
+            const authStatus = document.getElementById('authStatus');
+            const profileLink = document.getElementById('profileLink');
+            const logoutLink = document.getElementById('logoutLink');
+
+            if (result.success && result.authenticated) {
+                authStatus.innerHTML = `✅ Вы авторизованы как <strong>${result.user.username}</strong>`;
+                profileLink.style.display = 'inline';
+                logoutLink.style.display = 'inline';
+
+                // Настройка обработчиков для ссылок
+                profileLink.onclick = function() {
+                    alert('Страница профиля в разработке');
+                    return false;
+                };
+
+                logoutLink.onclick = async function(e) {
+                    e.preventDefault();
+                    await logout();
+                    return false;
+                };
+            } else {
+                authStatus.innerHTML = '❌ Вы не авторизованы';
+                profileLink.style.display = 'none';
+                logoutLink.style.display = 'none';
+            }
         } catch (error) {
-            result.textContent = 'Error: ' + error.message;
+            console.error('Auth check error:', error);
+            document.getElementById('authStatus').innerHTML = '⚠️ Ошибка проверки авторизации';
         }
     }
 
-    // Auto-test on load
-    window.onload = () => testApi('api/playgrounds');
+    // Функция выхода
+    async function logout() {
+        try {
+            const response = await fetch('/playly/api/logout', {
+                method: 'POST'
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert('Вы вышли из системы');
+                location.reload();
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
+    }
+
+    // Функции для тестирования API
+    async function testGetPlaygrounds() {
+        try {
+            showResult('⏳ Запрашиваю данные о площадках...', 'info');
+
+            const response = await fetch('/playly/api/playgrounds');
+            const data = await response.json();
+
+            if (response.ok) {
+                showResult(`✅ Успешно! Получено площадок: ${data.length}\n\n${JSON.stringify(data, null, 2)}`, 'success');
+            } else {
+                showResult(`❌ Ошибка ${response.status}: ${JSON.stringify(data, null, 2)}`, 'error');
+            }
+        } catch (error) {
+            showResult(`❌ Ошибка запроса: ${error.message}`, 'error');
+        }
+    }
+
+    async function testUserAPI() {
+        try {
+            showResult('⏳ Тестирую API пользователей...', 'info');
+
+            // Сначала проверяем регистрацию
+            const testData = {
+                email: `test${Date.now()}@example.com`,
+                username: `testuser${Date.now()}`,
+                password: 'test123'
+            };
+
+            showResult(`Тестовые данные:\n${JSON.stringify(testData, null, 2)}`, 'info');
+
+        } catch (error) {
+            showResult(`❌ Ошибка: ${error.message}`, 'error');
+        }
+    }
+
+    function showResult(message, type) {
+        const resultDiv = document.getElementById('apiResult');
+        resultDiv.innerHTML = `<pre>${message}</pre>`;
+        resultDiv.style.display = 'block';
+        resultDiv.className = '';
+
+        if (type === 'success') {
+            resultDiv.classList.add('result-success');
+        } else if (type === 'error') {
+            resultDiv.classList.add('result-error');
+        }
+    }
+
+    function clearResult() {
+        document.getElementById('apiResult').style.display = 'none';
+    }
 </script>
 </body>
 </html>

@@ -1,11 +1,13 @@
-package com.playly;
+package com.playly.servlets;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.playly.models.Playground;
+import com.playly.dao.PlaygroundDAO;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ApiServlet extends HttpServlet {
