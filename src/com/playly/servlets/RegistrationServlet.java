@@ -181,3 +181,4 @@ public class RegistrationServlet extends HttpServlet {
         response.getWriter().write(gson.toJson(result));
     }
 }
+
