@@ -11,9 +11,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @WebServlet("/api/register")
 public class RegistrationServlet extends HttpServlet {
@@ -136,11 +138,33 @@ public class RegistrationServlet extends HttpServlet {
             boolean created = userDAO.createUser(user);
 
             if (created) {
-                response.setStatus(HttpServletResponse.SC_CREATED);
-                result.put("success", true);
-                result.put("message", "Регистрация успешна! Теперь вы можете войти.");
-                result.put("userId", user.getId());
-                result.put("username", user.getUsername());
+                // Получаем созданного пользователя с ID (используем Optional)
+                Optional<User> userOptional = userDAO.getUserByEmail(email);
+
+                if (userOptional.isPresent()) {
+                    User createdUser = userOptional.get();
+
+                    // Создаем сессию для автоматической авторизации
+                    HttpSession session = request.getSession();
+                    session.setAttribute("user", createdUser);
+                    session.setAttribute("userId", createdUser.getId());
+                    session.setAttribute("username", createdUser.getUsername());
+                    session.setAttribute("email", createdUser.getEmail());
+                    session.setMaxInactiveInterval(30 * 60); // 30 минут
+
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                    result.put("success", true);
+                    result.put("message", "Регистрация успешна! Вы автоматически вошли в систему.");
+                    result.put("userId", createdUser.getId());
+                    result.put("username", createdUser.getUsername());
+                    result.put("email", createdUser.getEmail());
+                    result.put("sessionId", session.getId());
+                    result.put("redirectTo", "profile.html"); // Указываем куда перенаправить
+                } else {
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    result.put("success", false);
+                    result.put("message", "Ошибка при получении данных пользователя");
+                }
             } else {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 result.put("success", false);
